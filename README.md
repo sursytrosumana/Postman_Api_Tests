@@ -10,7 +10,7 @@ This repository contains Postman collections and environment files for API testi
 - `environments/`  
   Includes environment JSON files for environment.
 
-## 🚀 How to Use
+## How to Use
 
 1. Clone the repository.
 2. Import the json file in postman. 
