@@ -1,0 +1,1022 @@
+{
+	"info": {
+		"_postman_id": "418305ee-2b68-4dc0-8983-3074730c1983",
+		"name": "Notes API Test Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46416683",
+		"_collection_link": "https://sumana-5442598.postman.co/workspace/sumana-'s-Workspace~cf31e9fe-7af5-4309-8487-4daec6a67b8f/collection/46416683-418305ee-2b68-4dc0-8983-3074730c1983?action=share&source=collection_link&creator=46416683"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Message is 'Notes API is Running'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Notes API is Running\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://practice.expandtesting.com/notes/api/health-check",
+					"protocol": "https",
+					"host": [
+						"practice",
+						"expandtesting",
+						"com"
+					],
+					"path": [
+						"notes",
+						"api",
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Message is 'User account created successfully'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"User account created successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "sumana"
+						},
+						{
+							"key": "email",
+							"value": "{{Email}}"
+						},
+						{
+							"key": "password",
+							"value": "{{Password}}"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User Login - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"User Login - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Login successful\");",
+							"});",
+							"let response = pm.response.json();",
+							"",
+							"if (response.success && response.data && response.data.token) {",
+							"    // Set token to 'x-auth-token' environment variable",
+							"    pm.environment.set(\"x-auth-token\", response.data.token);",
+							"    console.log(\"x-auth-token environment variable set successfully.\");",
+							"} else {",
+							"    console.warn(\"No token found in the response.\");",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{Email}}"
+						},
+						{
+							"key": "password",
+							"value": "{{Password}}"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get User Profile - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Get User Profile - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Profile successful\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update Profile - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Update Profile - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Profile updated successful\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "sumana"
+						},
+						{
+							"key": "phone",
+							"value": "0123456789"
+						},
+						{
+							"key": "company",
+							"value": "Expand Testing"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/profile?x-auth-token={{x-auth-token}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					],
+					"query": [
+						{
+							"key": "x-auth-token",
+							"value": "{{x-auth-token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Forgot Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Forgot Password - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Forgot Password - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Password reset link successfully sent\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{Email}}"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/forgot-password?=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"forgot-password"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Reset Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify Reset Token - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Verify Reset Token - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"valid\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "dummy-token"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/verify-reset-password-token",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"verify-reset-password-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Reset Password - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Reset Password - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"successfully reset\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "dummy-token"
+						},
+						{
+							"key": "newPassword",
+							"value": "NewPass@123"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/reset-password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"reset-password"
+					],
+					"query": [
+						{
+							"key": "x-auth-token",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Change Password - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Change Password - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"successfully updated\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "currentPassword",
+							"value": "NewPass@123"
+						},
+						{
+							"key": "newPassword",
+							"value": "NewPass@1234"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/change-password?=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"change-password"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Logout User - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Logout User - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Successful Request\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Delete User Account - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Delete User Account - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Successful Request\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users/delete-account?x-auth-token={{x-auth-token}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"delete-account"
+					],
+					"query": [
+						{
+							"key": "x-auth-token",
+							"value": "{{x-auth-token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Note - Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Create Note - Message check\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Successful Request\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Test Note"
+						},
+						{
+							"key": "description",
+							"value": "This is a test note"
+						},
+						{
+							"key": "category",
+							"value": "Home"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/notes?=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Notes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"if (response.success && Array.isArray(response.data) && response.data.length > 0) {",
+							"    let firstNote = response.data[0]; // Get the first note",
+							"    pm.environment.set(\"noteId\", firstNote.id);",
+							"    console.log(\"noteId set to: \" + firstNote.id);",
+							"} else {",
+							"    console.warn(\"No notes found to set noteId.\");",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/notes?=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve a Note by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response includes correct structure\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"    pm.expect(jsonData.data).to.have.property(\"id\");",
+							"    pm.expect(jsonData.data).to.have.property(\"title\");",
+							"    pm.expect(jsonData.data).to.have.property(\"description\");",
+							"    pm.expect(jsonData.data).to.have.property(\"category\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/notes/{{noteId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes",
+						"{{noteId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Existing Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Note update response is valid\", function () {",
+							"    let jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.have.property(\"title\", \"Updated Note Title\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Updated Note Title"
+						},
+						{
+							"key": "description",
+							"value": "Updated Note Description"
+						},
+						{
+							"key": "completed",
+							"value": "true"
+						},
+						{
+							"key": "category",
+							"value": "Home"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/notes/{{noteId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes",
+						"{{noteId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Completed Status of Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Note completed status was updated\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(true);",
+							"    pm.expect(jsonData.data).to.have.property(\"completed\", true); // or false based on what you sent",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "completed",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/notes/{{noteId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes",
+						"{{noteId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Note deleted successfully\", function () {",
+							"    const res = pm.response.json();",
+							"    pm.expect(res.success).to.eql(true);",
+							"    pm.expect(res.message).to.include(\"Successful Request\");",
+							"});",
+							"",
+							"pm.environment.unset(\"noteId\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "{{x-auth-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "completed",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/notes/{{noteId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"notes",
+						"{{noteId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "x-auth-token",
+			"value": "a6b681836fb844b7830f7aa23cc171ab3e9c66f441484ebaa07d62e1bc4d2425"
+		}
+	]
+}
